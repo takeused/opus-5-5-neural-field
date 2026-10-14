@@ -1,4 +1,7 @@
 node_modules/
+# 빌드 산출물(npm run build가 node_modules에서 복사)
+public/vendor/
+.vercel/
 # 로컬 실행 설정(이 PC의 절대 경로 포함)
 .claude/
 # 이 PC의 내부망 주소가 담긴 휴대폰 접속용 QR
