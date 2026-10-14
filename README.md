@@ -3,6 +3,10 @@
 이 페이지를 직접 만든 모델, Claude Opus 5.5를 소개하는 인터랙티브 3D 파티클 사이트입니다.
 Claude Code 세션 안에서 Opus 5.5가 기획·구현·검증까지 진행했습니다.
 
+**배포 주소: https://opus-5-5-neural-field.vercel.app**
+
+`main`에 푸시하면 Vercel이 자동으로 다시 배포합니다.
+
 ## 실행
 
 ```bash
