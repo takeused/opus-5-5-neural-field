@@ -1,0 +1,6 @@
+# Vercel 업로드에서 제외: 이 PC 전용 파일(내부망 주소 QR, 절대 경로가 든 로컬 설정)과 빌드가 다시 만드는 산출물
+phone-qr.png
+.claude/
+node_modules/
+public/vendor/
+.env*
