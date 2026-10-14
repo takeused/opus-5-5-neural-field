@@ -1,0 +1,169 @@
+/* Opus 5.5 소개 페이지 — 미니멀 레이아웃과 타이포그래피 */
+:root {
+  --bg: #08070a;
+  --ink: #f2ece6;
+  --dim: #a1978f;
+  --faint: #8a817a; /* 배경 대비 약 5.2:1 — 작은 글자도 WCAG AA */
+  --accent: #e07a5f;
+  --line: rgba(242, 236, 230, 0.14);
+  --font: "Space Grotesk", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --pad: clamp(20px, 6vw, 96px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: #000; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+/* 장면: 세로 스크롤은 브라우저에, 가로 드래그는 회전에 */
+#webgl { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; z-index: 0; touch-action: pan-y; }
+/* 글 뒤만 어둡게: 화면에 고정하지 않고 섹션에 붙여 글과 함께 움직인다 (입자가 놓인 자리는 가리지 않음) */
+section::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 100vw; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(8, 7, 10, 0.9) 0%, rgba(8, 7, 10, 0.55) 32%, transparent 58%);
+}
+/* 말 걸기: 이웃 섹션과 같은 그라디언트를 쓰되 가운데 무대(입자 글자)만 세로 마스크로 비운다 — 경계에서 이음새가 생기지 않게 */
+#talk::before {
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 12%, rgba(0, 0, 0, 0.25) 42%, rgba(0, 0, 0, 0.25) 62%, #000 92%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 12%, rgba(0, 0, 0, 0.25) 42%, rgba(0, 0, 0, 0.25) 62%, #000 92%);
+}
+/* 시작 막: JS가 첫 프레임 뒤에 걷는다. JS·WebGL이 실패해도 3초 뒤엔 CSS가 스스로 걷어 글이 보이게 한다 */
+#veil { position: fixed; inset: 0; z-index: 20; background: var(--bg); pointer-events: none; transition: opacity 1.4s ease; animation: veil-out 1s ease 3s forwards; }
+#veil.off { opacity: 0; }
+@keyframes veil-out { to { opacity: 0; } }
+/* WebGL을 못 쓰는 환경: 입자 대신 은은한 빛 */
+.no-webgl #webgl { display: none; }
+.no-webgl body { background: radial-gradient(60vmax 60vmax at 75% 40%, rgba(224, 122, 95, 0.18), transparent 70%) fixed, var(--bg); }
+
+/* 뉴런 툴팁 */
+#tip {
+  position: fixed; z-index: 9; pointer-events: none; padding: 5px 11px; border-radius: 999px;
+  font: 12px var(--mono); color: var(--ink); background: rgba(8, 7, 10, 0.78); border: 1px solid var(--accent);
+  opacity: 0; transform: translate(14px, -50%) scale(0.92); transition: opacity 0.2s, transform 0.2s;
+}
+#tip.on { opacity: 1; transform: translate(14px, -50%) scale(1); }
+
+.top {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 10; pointer-events: none;
+  display: flex; justify-content: space-between; align-items: center; padding: 24px var(--pad);
+}
+.brand { pointer-events: auto; color: var(--ink); text-decoration: none; font-size: 14px; letter-spacing: 0.02em; }
+.brand b { font-weight: 500; color: var(--accent); }
+.hint { font: 11px var(--mono); letter-spacing: 0.06em; color: var(--faint); transition: opacity 0.8s; }
+.hint.off { opacity: 0; }
+
+main { position: relative; z-index: 2; pointer-events: none; }
+section {
+  position: relative;
+  min-height: 100vh; padding: 120px var(--pad);
+  display: flex; flex-direction: column; justify-content: center;
+  max-width: calc(560px + var(--pad) * 2);
+}
+section a, section button, section input, .spec { pointer-events: auto; }
+
+.eyebrow { font: 12px var(--mono); letter-spacing: 0.08em; color: var(--accent); margin-bottom: 18px; }
+h1 { font-size: clamp(56px, 9vw, 132px); font-weight: 700; line-height: 0.92; letter-spacing: -0.04em; margin-bottom: 28px; }
+h1 em { font-style: normal; color: var(--accent); }
+h2 { font-size: clamp(32px, 4vw, 52px); font-weight: 700; line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 18px; }
+.lead { font-size: clamp(16px, 1.3vw, 19px); color: var(--dim); max-width: 30em; }
+
+/* 01 숫자 */
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 36px 40px; margin-top: 48px; }
+.facts dt { font-size: clamp(32px, 3.4vw, 48px); font-weight: 500; line-height: 1; letter-spacing: -0.02em; }
+.facts dd { margin-top: 10px; font-size: 13px; color: var(--dim); }
+
+/* 02 패밀리: 한 줄에 이름 · 한 줄 설명 · 가격 */
+.fam { list-style: none; margin-top: 40px; border-top: 1px solid var(--line); }
+.fam li { border-bottom: 1px solid var(--line); }
+.fam button {
+  width: 100%; display: grid; grid-template-columns: 1fr auto; grid-template-areas: "name price" "desc price";
+  gap: 2px 16px; align-items: center; padding: 16px 0; background: none; border: 0; text-align: left;
+  color: var(--dim); font: inherit; cursor: pointer; transition: color 0.3s, padding 0.3s;
+}
+.fam b { grid-area: name; font-size: 19px; font-weight: 500; color: var(--ink); }
+.fam b i { font: 500 11px var(--mono); font-style: normal; color: var(--accent); margin-left: 8px; letter-spacing: 0.04em; }
+.fam span { grid-area: desc; font-size: 13px; }
+.fam em { grid-area: price; font: 14px var(--mono); font-style: normal; color: var(--dim); }
+.fam button[aria-pressed="true"] { padding-left: 14px; box-shadow: inset 2px 0 0 var(--accent); }
+.fam button[aria-pressed="true"] em { color: var(--ink); }
+.fam-note { margin-top: 14px; font: 12px var(--mono); color: var(--faint); }
+
+/* 03 effort 다이얼 */
+.dial { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 44px; border-bottom: 1px solid var(--line); }
+.dial button { background: none; border: 0; padding: 14px 0; font: 500 13px var(--mono); color: var(--faint); cursor: pointer; transition: color 0.3s; }
+.dial button:hover, .dial button[aria-checked="true"] { color: var(--ink); }
+.dial-thumb {
+  position: absolute; left: 0; bottom: -1px; width: 20%; height: 2px; background: var(--accent);
+  transform: translateX(calc(var(--i, 1) * 100%)); transition: transform 0.5s cubic-bezier(0.3, 1.3, 0.5, 1);
+}
+.dial-note { margin-top: 18px; min-height: 1.6em; font-size: 15px; color: var(--dim); }
+
+/* 03 스펙트럼 바 */
+.spec { position: relative; height: 40px; margin-top: 44px; border-radius: 6px; overflow: hidden; cursor: ew-resize; touch-action: none; }
+.spec canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.spec-win {
+  position: absolute; top: 0; bottom: 0; opacity: 0; transition: opacity 0.3s;
+  border-left: 2px solid #fff; border-right: 2px solid #fff; box-shadow: 0 0 0 9999px rgba(8, 7, 10, 0.72);
+}
+.spec.on .spec-win { opacity: 1; }
+.spec-read { margin-top: 14px; min-height: 1.6em; font: 13px var(--mono); color: var(--dim); }
+.spec-read .sw { display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%; vertical-align: -1px; }
+.spec-read button { margin-left: 12px; background: none; border: 0; font: inherit; color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* 04 말 걸기: 제목 · 빈 무대(입자 글자) · 입력 */
+#talk { justify-content: space-between; max-width: none; }
+#talk .stage { flex: 1; min-height: 36vh; }
+.say-label { display: block; margin-bottom: 6px; font: 12px var(--mono); color: var(--faint); }
+.say {
+  width: min(100%, 640px); padding: 12px 0; outline: none; background: none;
+  border: 0; border-bottom: 1px solid var(--line); color: var(--ink);
+  font: 500 clamp(22px, 2.6vw, 34px) var(--font); transition: border-color 0.3s;
+}
+.say:focus { border-color: var(--accent); }
+
+footer {
+  position: relative; z-index: 2; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  padding: 40px var(--pad) 48px; border-top: 1px solid var(--line); font: 12px var(--mono); color: var(--faint);
+  background: var(--bg);
+}
+footer a { color: var(--dim); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+
+/* 등장: 섹션이 보이면 순서대로 */
+.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 1s ease, transform 1s cubic-bezier(0.2, 0.9, 0.2, 1); }
+.js .in .reveal { opacity: 1; transform: none; }
+.in .reveal:nth-child(2) { transition-delay: 0.08s; }
+.in .reveal:nth-child(3) { transition-delay: 0.16s; }
+.in .reveal:nth-child(4) { transition-delay: 0.24s; }
+.in .reveal:nth-child(5) { transition-delay: 0.32s; }
+
+/* 모바일: 입자는 위, 글은 아래 */
+@media (max-width: 900px) {
+  /* 모바일: 입자는 섹션 위쪽, 글은 아래쪽. 위·아래 끝은 모든 섹션이 같은 농도라 경계에 이음새가 없다 */
+  section::before { background: linear-gradient(180deg, rgba(8, 7, 10, 0.94) 0%, transparent 12%, transparent 44%, rgba(8, 7, 10, 0.78) 62%, rgba(8, 7, 10, 0.94) 100%); }
+  #talk::before {
+    -webkit-mask-image: none; mask-image: none;
+    background: linear-gradient(180deg, rgba(8, 7, 10, 0.94) 0%, rgba(8, 7, 10, 0.6) 18%, transparent 30%, transparent 72%, rgba(8, 7, 10, 0.94) 100%);
+  }
+  /* 위로 떠나는 입자가 브랜드명 뒤를 지나갈 때 읽히도록 */
+  .top { background: linear-gradient(rgba(8, 7, 10, 0.85), transparent); }
+  section { max-width: none; padding-top: 50vh; padding-bottom: 72px; justify-content: flex-end; }
+  #talk { padding-top: 100px; }
+  .hint { font-size: 10px; letter-spacing: 0.03em; }
+  .fam b { font-size: 17px; }
+  .facts { gap: 28px 24px; margin-top: 36px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}

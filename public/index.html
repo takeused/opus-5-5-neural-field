@@ -1,0 +1,119 @@
+<!doctype html>
+<!-- Claude Opus 5.5를 소개하는 미니멀 3D 파티클 랜딩 페이지 -->
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Opus 5.5</title>
+  <meta name="description" content="이 페이지를 직접 만든 모델, Claude Opus 5.5." />
+  <meta name="theme-color" content="#08070a" />
+  <meta property="og:title" content="Claude Opus 5.5" />
+  <meta property="og:description" content="이 페이지를 직접 만든 모델. 8만 개의 입자로 보는 Claude Opus 5.5." />
+  <meta property="og:type" content="website" />
+  <!-- JS가 돌 때만 등장 애니메이션을 건다 — JS가 없거나 실패해도 글은 보인다 -->
+  <script>
+    document.documentElement.classList.add('js');
+    // 안전장치: 4초 안에 장면이 준비되지 않으면(스크립트 오류 등) 등장 애니메이션을 풀어 글을 보이게 한다
+    setTimeout(function () { var h = document.documentElement; if (!h.classList.contains('ready')) h.classList.remove('js'); }, 4000);
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+KR:wght@300;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='10' fill='%23e07a5f'/></svg>" />
+  <script type="importmap">
+    { "imports": {
+        "three": "/vendor/three/build/three.module.js",
+        "three/addons/": "/vendor/three/examples/jsm/"
+    } }
+  </script>
+</head>
+<body>
+  <div id="veil" aria-hidden="true"></div>
+  <canvas id="webgl" aria-hidden="true"></canvas>
+  <div id="tip" aria-hidden="true"></div>
+
+  <header class="top">
+    <a class="brand" href="#hero">Claude <b>Opus 5.5</b></a>
+    <span class="hint" id="hint">드래그 · 클릭 · 길게 누르기</span>
+  </header>
+
+  <main>
+    <section id="hero">
+      <p class="eyebrow reveal">claude-opus-5-5</p>
+      <h1 class="reveal">Claude<br /><em>Opus 5.5</em></h1>
+      <p class="lead reveal">이 페이지를 직접 만든 모델입니다.</p>
+    </section>
+
+    <section id="about">
+      <p class="eyebrow reveal">01</p>
+      <h2 class="reveal">한눈에 보기</h2>
+      <p class="lead reveal">Anthropic Claude 5 패밀리, Opus 라인의 최신 모델.</p>
+      <dl class="facts reveal">
+        <div><dt>1M</dt><dd>한 번에 읽는 토큰</dd></div>
+        <div><dt>128K</dt><dd>한 번에 쓰는 토큰</dd></div>
+        <div><dt>$4 · $20</dt><dd>입력 · 출력, 100만 토큰당</dd></div>
+        <div><dt>2026.06</dt><dd>지식 기준 시점</dd></div>
+      </dl>
+    </section>
+
+    <section id="family">
+      <p class="eyebrow reveal">02</p>
+      <h2 class="reveal">Claude 5 패밀리</h2>
+      <p class="lead reveal">모두 1M 컨텍스트. 무게와 가격이 다릅니다.</p>
+      <ul class="fam reveal" aria-label="Claude 5 패밀리 모델">
+        <li><button type="button" aria-pressed="false"><b>Fable 5.1</b><span>가장 강력한 공개 모델</span><em>$10 · $50</em></button></li>
+        <li><button type="button" aria-pressed="true"><b>Opus 5.5 <i>지금 여기</i></b><span>기본 모델</span><em>$4 · $20</em></button></li>
+        <li><button type="button" aria-pressed="false"><b>Sonnet 5.5</b><span>속도와 성능의 균형</span><em>$2 · $10</em></button></li>
+        <li><button type="button" aria-pressed="false"><b>Haiku 5.5</b><span>가장 가볍고 저렴함</span><em>$0.10 · $0.50</em></button></li>
+      </ul>
+      <p class="fam-note reveal">가격은 입력 · 출력, 100만 토큰당</p>
+    </section>
+
+    <section id="depth">
+      <p class="eyebrow reveal">03</p>
+      <h2 class="reveal">얼마나 깊이 생각할까</h2>
+      <p class="lead reveal">생각은 끌 수 없습니다. 대신 effort로 깊이를 정합니다. 단계를 올리면 켜지는 뉴런이 늘어납니다.</p>
+      <div class="dial reveal" role="radiogroup" aria-label="effort 단계">
+        <button type="button" role="radio" aria-checked="false">low</button>
+        <button type="button" role="radio" aria-checked="true">medium</button>
+        <button type="button" role="radio" aria-checked="false">high</button>
+        <button type="button" role="radio" aria-checked="false">xhigh</button>
+        <button type="button" role="radio" aria-checked="false">max</button>
+        <span class="dial-thumb" aria-hidden="true"></span>
+      </div>
+      <p class="dial-note reveal" id="dial-note" aria-live="polite"></p>
+    </section>
+
+    <section id="light">
+      <p class="eyebrow reveal">04</p>
+      <h2 class="reveal">빛으로 나누기</h2>
+      <p class="lead reveal">입자 하나하나가 380–780nm 사이의 파장을 품고 있습니다. 바를 드래그해 원하는 빛만 남겨 보세요.</p>
+      <div class="spec reveal" id="spec" role="slider" tabindex="0" aria-label="남길 빛의 파장 (nm)" aria-valuemin="380" aria-valuemax="780" aria-valuenow="580">
+        <canvas></canvas>
+        <div class="spec-win"></div>
+      </div>
+      <p class="spec-read reveal" id="spec-read" aria-live="polite"></p>
+    </section>
+
+    <section id="talk">
+      <div>
+        <p class="eyebrow reveal">05</p>
+        <h2 class="reveal">말을 걸어 보세요</h2>
+      </div>
+      <div class="stage" id="stage" aria-hidden="true"></div>
+      <label class="reveal">
+        <span class="say-label">입자가 글자로 다시 모입니다</span>
+        <input class="say" id="say" type="text" maxlength="20" value="안녕, 나는 Opus 5.5" autocomplete="off" spellcheck="false" />
+      </label>
+    </section>
+  </main>
+
+  <footer>
+    <p id="made">이 페이지는 Claude Opus 5.5가 직접 만들었습니다.</p>
+    <a href="#hero">처음으로 ↑</a>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

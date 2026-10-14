@@ -1,0 +1,17 @@
+{
+  "name": "opus-5-5-neural-field",
+  "version": "1.0.0",
+  "description": "Claude Opus 5.5를 소개하는 인터랙티브 3D 파티클 사이트",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}
